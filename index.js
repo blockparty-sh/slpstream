@@ -3,7 +3,6 @@ const express = require('express')
 const ip = require('ip')
 const app = express()
 const cors = require("cors")
-const slpsocketd = require('fountainhead-core').slpsocketd
 
 const config = {
   "query": {
@@ -52,16 +51,19 @@ app.listen(config.port, () => {
   }
 )
 
-slpsocketd.init({
-    bit: {
-        host: process.env.zmq_outgoing_host ? process.env.zmq_outgoing_host : '0.0.0.0',
-        port: Number.parseInt(process.env.zmq_outgoing_port ? process.env.zmq_outgoing_port : 28339)
-    },
-    socket: {
-        port: process.env.slpsockserve_port ? process.env.slpsockserve_port : 3000,
-        app: app
-    },
-    heartbeat: 10,
-    verbose: true
+
+const bit = require("./bit")
+const socket = require("./socket")
+const connections =  { pool: {} };
+bit.init({
+    host: process.env.zmq_outgoing_host ? process.env.zmq_outgoing_host : '0.0.0.0',
+    port: Number.parseInt(process.env.zmq_outgoing_port ? process.env.zmq_outgoing_port : 28339),
+    connections: connections,
+});
+
+socket.init({
+    port: process.env.slpsockserve_port ? process.env.slpsockserve_port : 3000,
+    app: app,
+    connections: connections,
 });
 

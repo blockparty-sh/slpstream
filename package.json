@@ -1,7 +1,7 @@
 {
-  "name": "fountainhead-slpsockserve",
-  "version": "0.0.2",
-  "description": "slpsocket frontend",
+  "name": "slpstream",
+  "version": "0.0.1",
+  "description": "slpsocket using gs++",
   "main": "index.js",
   "scripts": {
     "start": "node index"
@@ -9,11 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bchaddrjs-slp": "^0.2.8",
     "cors": "^2.8.5",
     "dotenv": "^6.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "fountainhead-core": "0.0.12",
-    "ip": "^1.1.5"
+    "ip": "^1.1.5",
+    "mingo": "^2.4.0",
+    "slp-validate": "^1.1.2",
+    "traverse": "^0.6.6",
+    "zeromq": "^5.2.0"
   }
 }
