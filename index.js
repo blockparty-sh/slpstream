@@ -9,8 +9,8 @@ const config = {
     "v": 3,
     "q": { "find": {} }
   },
-  "host": process.env.slpsockserve_host ? process.env.slpsockserve_host : "http://127.0.0.1",
-  "port": Number.parseInt(process.env.slpsockserve_port ? process.env.slpsockserve_port : 3001)
+  "host": process.env.slpstream_host ? process.env.slpstream_host : "http://127.0.0.1",
+  "port": Number.parseInt(process.env.slpstream_port ? process.env.slpstream_port : 3001)
 };
 config.url = config.host + ":" + config.port + "/s/";
 
@@ -40,7 +40,7 @@ app.get('/', function(req, res) {
 app.listen(config.port, () => {
   console.log("######################################################################################");
   console.log("#")
-  console.log("#  SLPSOCKSERVE: SLPsocket Microservice")
+  console.log("#  SLPStream: SLPsocket upgraded with gs++")
   console.log("#  Serving Transactions through HTTP...")
   console.log("#")
   console.log(`#  Channel: ${ip.address()}:${config.port}/channel`);
@@ -62,7 +62,7 @@ bit.init({
 });
 
 socket.init({
-    port: process.env.slpsockserve_port ? process.env.slpsockserve_port : 3000,
+    port: process.env.slpstream_port ? process.env.slpstream_port : 3000,
     app: app,
     connections: connections,
 });

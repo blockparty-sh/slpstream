@@ -1,18 +1,18 @@
-## What is SLPSockserve?
+## What is SLPStream?
 
-SLPSockserve is a frontend API for SLPDB that provides a streaming output of new transactions. Unlike [slpserve](https://github.com/fountainhead-cash/slpserve) which is a similar frontend API used to fetch historical blockchain data, SLPSockserve can be used display data as it comes in.
+SLPStream is a frontend API for SLPDB that provides a streaming output of new transactions. Unlike [slpsockserve](https://github.com/fountainhead-cash/slpsockserve), SLPStream uses GS++ to for greater efficiency.
 
 ## Installation
 
 ### Prerequisite
 
-For SLPSockserve to work you first need to go through the install process for [bitd](https://github.com/simpledger/SLPDB), which will continually scan the blockchain for new transactions and blocks which will be streamed live over the SLPsocket (slpsockserve) API.
+For SLPSockserve to work you first need to go through the install process for [gs++](https://gs.fountainhead.cash), which will continually scan the blockchain for new transactions and blocks which will be streamed live over the SLPStream API.
 
-### Setting up SLPSockserve
+### Setting up SLPStream
 
 Clone this repository:
 ```
-git clone https://github.com/fountainhead-cash/slpsockserve.git && cd slpsockserve
+git clone https://github.com/fountainhead-cash/slpstream.git && cd slpstream
 ```
 
 Install dependencies:
@@ -20,14 +20,14 @@ Install dependencies:
 npm install
 ```
 
-Configure Sockserve:
+Configure SLPStream:
 ```
 cp .env.example .env
 $(EDITOR) .env
 
 ```
 
-Start SLPSockserve
+Start SLPStream
 ```
 npm start
 ```
