@@ -1,6 +1,6 @@
 ## What is SLPStream?
 
-SLPStream is a frontend API for SLPDB that provides a streaming output of new transactions. Unlike [slpsockserve](https://github.com/fountainhead-cash/slpsockserve), SLPStream uses GS++ to for greater efficiency.
+SLPStream is a frontend API for GS++ that provides a streaming output of new transactions. Unlike [slpsockserve](https://github.com/fountainhead-cash/slpsockserve), SLPStream uses GS++ to for greater efficiency.
 
 ## Installation
 
