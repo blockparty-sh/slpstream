@@ -27,29 +27,46 @@ const buffer_to_sna = async function(buf) {
     }
     let slp = slpvalidate.Slp.parseSlpOutputScript(tx.outputs[0].script.toBuffer());
     if (slp.hasOwnProperty('sendOutputs')) {
-        slp.outputs = slp.sendOutputs.slice(1).map((v, i) => {
-          let addr = null;
-          if (o.out.length > i+1) {
-            if (o.out[i+1].hasOwnProperty("e")) {
-              if (o.out[i+1].e.hasOwnProperty("a")) {
-                addr = o.out[i+1].e.a;
-              }
+      slp.outputs = slp.sendOutputs.slice(1).map((v, i) => {
+        let addr = null;
+        if (o.out.length > i+1) {
+          if (o.out[i+1].hasOwnProperty("e")) {
+            if (o.out[i+1].e.hasOwnProperty("a")) {
+              addr = o.out[i+1].e.a;
             }
           }
-          return {
-            address: addr,
-            amount: v.toString()
-          }
-        });
-        delete slp.sendOutputs;
+        }
+        return {
+          address: addr,
+          amount: v.toString()
+        }
+      });
+      delete slp.sendOutputs;
     }
     if (slp.hasOwnProperty('genesisOrMintQuantity')) {
-        slp.genesisOrMintQuantity = slp.genesisOrMintQuantity.toString();
+      if (! slp.hasOwnProperty('outputs')) {
+        slp.outputs = [];
+      }
+
+      let addr = null;
+      const oidx = slp.transactionType === "GENESIS" ? 1 : slp.batonVout;
+      if (o.out.length > oidx) {
+        if (o.out[oidx].hasOwnProperty("e")) {
+          if (o.out[oidx].e.hasOwnProperty("a")) {
+            addr = o.out[oidx].e.a;
+          }
+        }
+      }
+
+      slp.outputs.push({
+        address: addr,
+        amount: slp.genesisOrMintQuantity.toString()
+      });
     }
 
     o.slp = {
-	valid: true,
-	detail: slp,
+      valid: true,
+      detail: slp,
     };
 
     return o;
