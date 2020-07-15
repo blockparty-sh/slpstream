@@ -25,27 +25,49 @@ const buffer_to_sna = async function(buf) {
         m.e.a = slpaddrjs.toSlpAddress(m.e.a);
       }
     }
-    o.slp = slpvalidate.Slp.parseSlpOutputScript(tx.outputs[0].script.toBuffer());
-    if (o.slp.hasOwnProperty('sendOutputs')) {
-        o.slp.outputs = o.slp.sendOutputs.slice(1).map((v, i) => {
-          let addr = null;
-          if (o.out.length > i+1) {
-            if (o.out[i+1].hasOwnProperty("e")) {
-              if (o.out[i+1].e.hasOwnProperty("a")) {
-                addr = o.out[i+1].e.a;
-              }
+    let slp = slpvalidate.Slp.parseSlpOutputScript(tx.outputs[0].script.toBuffer());
+    if (slp.hasOwnProperty('sendOutputs')) {
+      slp.outputs = slp.sendOutputs.slice(1).map((v, i) => {
+        let addr = null;
+        if (o.out.length > i+1) {
+          if (o.out[i+1].hasOwnProperty("e")) {
+            if (o.out[i+1].e.hasOwnProperty("a")) {
+              addr = o.out[i+1].e.a;
             }
           }
-          return {
-            address: addr,
-            amount: v.toString()
+        }
+        return {
+          address: addr,
+          amount: v.toString()
+        }
+      });
+      delete slp.sendOutputs;
+    }
+    if (slp.hasOwnProperty('genesisOrMintQuantity')) {
+      if (! slp.hasOwnProperty('outputs')) {
+        slp.outputs = [];
+      }
+
+      let addr = null;
+      const oidx = slp.transactionType === "GENESIS" ? 1 : slp.batonVout;
+      if (o.out.length > oidx) {
+        if (o.out[oidx].hasOwnProperty("e")) {
+          if (o.out[oidx].e.hasOwnProperty("a")) {
+            addr = o.out[oidx].e.a;
           }
-        });
-        delete o.slp.sendOutputs;
+        }
+      }
+
+      slp.outputs.push({
+        address: addr,
+        amount: slp.genesisOrMintQuantity.toString()
+      });
     }
-    if (o.slp.hasOwnProperty('genesisOrMintQuantity')) {
-        o.slp.genesisOrMintQuantity = o.slp.genesisOrMintQuantity.toString();
-    }
+
+    o.slp = {
+      valid: true,
+      detail: slp,
+    };
 
     return o;
 }
@@ -77,7 +99,7 @@ const init = function(config) {
       for (const tx of block.transactions) {
         txs.push(await buffer_to_sna(tx.toBuffer()));
       }
-      o = {txns: txs };
+      o = {header: block.header, txns: txs};
      //  console.log(util.inspect(o, {depth: 10}));
       if (config.verbose) {
         console.log(message);
@@ -154,7 +176,7 @@ const init = function(config) {
               }
             }
             connection.res.sseSend({
-              type: type, index: block.i, data: transformed 
+              type: type, header: block.header, data: transformed
             })
           }
         })
