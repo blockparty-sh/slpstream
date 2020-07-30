@@ -17,7 +17,7 @@
     "fountainhead-core": "0.0.12",
     "ip": "^1.1.5",
     "mingo": "^2.4.0",
-    "slp-validate": "^1.1.2",
+    "slp-validate": "^1.2.2",
     "traverse": "^0.6.6",
     "zeromq": "^5.2.0"
   }
